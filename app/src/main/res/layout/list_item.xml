@@ -23,13 +23,13 @@
         <TextView
             android:layout_marginTop="5dp"
             android:id="@+id/tvTelecomName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:gravity="center"/>
 
         <ImageButton
-            android:layout_marginLeft="10dp"
             android:id="@+id/imb_empty_heart"
             android:layout_width="25dp"
             android:layout_height="25dp"
@@ -37,6 +37,7 @@
             android:scaleType="fitCenter"
             android:padding="0dp"
             android:background="@android:color/transparent" />
+
 
 
     </LinearLayout>

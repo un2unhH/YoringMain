@@ -271,6 +271,7 @@ public class MainActivity2 extends AppCompatActivity {
             ImageButton imbEmptyHeart = convertView.findViewById(R.id.imb_empty_heart);
 
             tvPlanName.setText(plan.getSubName());
+            Log.d("CustomAdapter", "Telecom Name: " + plan.getTelecomName());
             tvTelecomName.setText(plan.getTelecomName());
             tvPrice.setText(String.format("가격: %s", plan.getPrice()));
             tvSpeedLimit.setText(String.format("통신망: %s", plan.getUsageNetwork()));

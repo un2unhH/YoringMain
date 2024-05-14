@@ -55,8 +55,8 @@ public class MainActivity4 extends AppCompatActivity {
     RadioButton rdbPrice1, rdbPrice2, rdbPrice3, rdbPrice4, rdbLimit1, rdbLimit2, rdbLimit3, rdbLimit4;
     TextView tvDataUsage0, tvDataUsage7, tvDataUsage15, tvDataUsage71, tvDataUsage100, tvDataUsageUnlimited;
     private int dataUsageProgress = 0;
-    String[] itemsSpinner1 = {"선택하세요", "SKT", "KT", "LG U+"};
-    String[] itemsSpinner2 = {"선택하세요", "스노우맨", "프리티", "스마텔", "SK 7모바일", "헬로모바일", "KT M 모바일", "티플러스"};
+    String[] itemsSpinner1 = {"선택하세요", "SKT", "KT", "LG"};
+    String[] itemsSpinner2 = {"선택하세요", "스노우맨", "프리티", "스마텔", "SK 세븐모바일", "헬로모바일", "T Plus"};
 
     private static final String DATA_USAGE_PROGRESS_KEY = "data_usage_progress";
 
@@ -292,55 +292,43 @@ public class MainActivity4 extends AppCompatActivity {
         private String usage_network;
         private String data;
         private String speed_limit;
+        private String call;
+        private String message;
+        private String real_data;
+        private String sale_price;
 
-        public String getSub_name() {
-            return sub_name;
-        }
+        // 모든 필드의 게터와 세터
+        public String getSub_name() { return sub_name; }
+        public void setSub_name(String sub_name) { this.sub_name = sub_name; }
 
-        public void setSub_name(String sub_name) {
-            this.sub_name = sub_name;
-        }
+        public String getPrice() { return price; }
+        public void setPrice(String price) { this.price = price; }
 
-        public String getPrice() {
-            return price;
-        }
+        public String getTelecomName() { return telecom_name; }
+        public void setTelecomName(String telecom_name) { this.telecom_name = telecom_name; }
 
-        public void setPrice(String price) {
-            this.price = price;
-        }
+        public String getUsageNetwork() { return usage_network; }
+        public void setUsageNetwork(String usage_network) { this.usage_network = usage_network; }
 
-        public String getTelecomName() {
-            return telecom_name;
-        }
+        public String getData() { return data; }
+        public void setData(String data) { this.data = data; }
 
-        public void setTelecomName(String telecom_name) {
-            this.telecom_name = telecom_name;
-        }
+        public String getSpeedLimit() { return speed_limit; }
+        public void setSpeedLimit(String speed_limit) { this.speed_limit = speed_limit; }
 
-        public String getUsageNetwork() {
-            return usage_network;
-        }
+        public String getCall() { return call; }
+        public void setCall(String call) { this.call = call; }
 
-        public void setUsageNetwork(String usage_network) {
-            this.usage_network = usage_network;
-        }
+        public String getMessage() { return message; }
+        public void setMessage(String message) { this.message = message; }
 
-        public String getData() {
-            return data;
-        }
+        public String getReal_data() { return real_data; }
+        public void setReal_data(String real_data) { this.real_data = real_data; }
 
-        public void setData(String data) {
-            this.data = data;
-        }
-
-        public String getSpeedLimit() {
-            return speed_limit;
-        }
-
-        public void setSpeedLimit(String speed_limit) {
-            this.data = speed_limit;
-        }
+        public String getSale_price() { return sale_price; }
+        public void setSale_price(String sale_price) { this.sale_price = sale_price; }
     }
+
 
 
     @Override
@@ -485,8 +473,8 @@ public class MainActivity4 extends AppCompatActivity {
                         favoriteCount = (int) dataSnapshot.getChildrenCount();
                         favoritesMap.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String subName = snapshot.getKey(); // 여기에서 받은 키는 이미 인코딩된 키
-                            String decodedSubName = decodeFromFirebaseKey(subName); // 필요하다면 디코딩 함수 구현
+                            String subName = snapshot.getKey();
+                            String decodedSubName = decodeFromFirebaseKey(subName);
                             favoritesMap.put(decodedSubName, true);
                         }
                         notifyDataSetChanged();
@@ -500,7 +488,6 @@ public class MainActivity4 extends AppCompatActivity {
             }
         }
 
-        // 인코딩된 키를 원래 상태로 복원하는 함수 (필요한 경우에만 구현)
         private String decodeFromFirebaseKey(String encodedKey) {
             return encodedKey.replace(',', '.').replace('-', '#').replace('+', '$').replace('(', '[').replace(')', ']');
         }
@@ -517,19 +504,25 @@ public class MainActivity4 extends AppCompatActivity {
             TextView tvTelecomName = convertView.findViewById(R.id.tvTelecomName);
             TextView tvPrice = convertView.findViewById(R.id.tvPrice);
             TextView tvSpeedLimit = convertView.findViewById(R.id.tvSpeedLimit);
+            TextView tvData = convertView.findViewById(R.id.tvData);
             ImageButton imbEmptyHeart = convertView.findViewById(R.id.imb_empty_heart);
 
             tvPlanName.setText(plan.getSub_name());
             tvTelecomName.setText(plan.getTelecomName());
             tvPrice.setText(String.format("가격: %s", plan.getPrice()));
-            tvSpeedLimit.setText(String.format("통신망: %s", plan.getUsageNetwork()));
-            tvSpeedLimit.setText(String.format("%s", plan.getSpeedLimit()));
+            tvData.setText(plan.getData());
+            if (plan.getSpeedLimit() != null) {
+                tvSpeedLimit.setText(plan.getSpeedLimit());
+            } else {
+                tvSpeedLimit.setVisibility(View.GONE);
+            }
 
             Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.nanumsbold_e);
             tvPlanName.setTypeface(typeface);
             tvTelecomName.setTypeface(typeface);
             tvPrice.setTypeface(typeface);
             tvSpeedLimit.setTypeface(typeface);
+            tvData.setTypeface(typeface);
 
             String encodedSubName = encodeForFirebaseKey(plan.getSub_name());
             if (favoritesMap.containsKey(encodedSubName)) {
@@ -549,23 +542,19 @@ public class MainActivity4 extends AppCompatActivity {
                         return;
                     }
 
-                    // 먼저 UI 업데이트
                     imbEmptyHeart.setImageResource(R.drawable.full_heart);
                     imbEmptyHeart.setTag("full");
                     Toast.makeText(getContext(), plan.getSub_name() + " 찜 목록에 추가!", Toast.LENGTH_SHORT).show();
 
-                    // 데이터베이스 업데이트
                     favRef.child(encodedSubName).setValue(true);
-                    favoriteCount++;  // 실제로는 데이터베이스의 응답을 받아 업데이트해야 함
+                    favoriteCount++;
                 } else {
-                    // 먼저 UI 업데이트
                     imbEmptyHeart.setImageResource(R.drawable.empty_heart);
                     imbEmptyHeart.setTag("empty");
                     Toast.makeText(getContext(), plan.getSub_name() + " 찜 목록에서 제거", Toast.LENGTH_SHORT).show();
 
-                    // 데이터베이스 업데이트
                     favRef.child(encodedSubName).removeValue();
-                    favoriteCount--;  // 실제로는 데이터베이스의 응답을 받아 업데이트해야 함
+                    favoriteCount--;
                 }
             });
 
@@ -618,7 +607,7 @@ public class MainActivity4 extends AppCompatActivity {
         } return false;
     }
 
-    //함수 적용 아직 안됨. 속도 제한 데이터로 필터링하는 함수
+    //속도 제한 데이터로 필터링하는 함수
     private boolean filterBySpeedLimit(String limitStr) {
         if (limitStr == null) {
             return false;
@@ -704,11 +693,14 @@ public class MainActivity4 extends AppCompatActivity {
         String selectedMainTelecom = spnMainTelecom.getSelectedItem().toString();
         String selectedExtraTelecom = spnExtraTelecom.getSelectedItem().toString();
 
-        if (!selectedMainTelecom.equals("선택하세요") && plan.getTelecomName().equals(selectedMainTelecom)) {
-            return true;
-        }
-        if (!selectedExtraTelecom.equals("선택하세요") && plan.getTelecomName().equals(selectedExtraTelecom)) {
-            return true;
+        String telecomName = plan.getTelecomName();
+        if (telecomName != null) {
+            if (!"선택하세요".equals(selectedMainTelecom) && telecomName.equals(selectedMainTelecom)) {
+                return true;
+            }
+            if (!"선택하세요".equals(selectedExtraTelecom) && telecomName.equals(selectedExtraTelecom)) {
+                return true;
+            }
         }
         return false;
     }
