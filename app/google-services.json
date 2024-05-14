@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "238150667517",
+    "firebase_url": "https://yoring2024-659ed-default-rtdb.firebaseio.com",
+    "project_id": "yoring2024-659ed",
+    "storage_bucket": "yoring2024-659ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238150667517:android:c0db56f923184529b40294",
+        "android_client_info": {
+          "package_name": "com.example.yoringinsertdata"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238150667517-37oqn63k33osdilm20tp75art9944gkb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqS_z_t73W7ZfTUa7px21cT7z7dIfchWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238150667517-37oqn63k33osdilm20tp75art9944gkb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238150667517:android:b3e513e8e1dbc60bb40294",
+        "android_client_info": {
+          "package_name": "com.example.yoringmain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238150667517-37oqn63k33osdilm20tp75art9944gkb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqS_z_t73W7ZfTUa7px21cT7z7dIfchWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238150667517-37oqn63k33osdilm20tp75art9944gkb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

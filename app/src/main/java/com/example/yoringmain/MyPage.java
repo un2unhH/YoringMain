@@ -1,0 +1,192 @@
+package com.example.yoringmain;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import android.widget.Toast;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
+
+public class MyPage extends AppCompatActivity {
+
+    private static final String TAG = "MyPage";
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+    private TextView nameTextView;
+    private ImageView profileImageView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_page);
+        mAuth = FirebaseAuth.getInstance();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_mypage);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        startActivity(new Intent(MyPage.this, MainActivity.class));
+                        return true;
+                    case R.id.nav_membership:
+                        startActivity(new Intent(MyPage.this, MembershipMain.class));
+                        return true;
+                    case R.id.nav_mypage:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        TextView txt1, txt2;
+        Button btnLogout, btn_choice, btn_delete_id, btn_change_use;
+
+        nameTextView = findViewById(R.id.txt1);
+        txt2 = findViewById(R.id.txt2); //현재 어떤 로그인 상태가 무엇인지 알려주는 코드 추후에 추가하기
+        profileImageView = findViewById(R.id.profile);
+        btnLogout = findViewById(R.id.btn_logout);
+        btn_choice = findViewById(R.id.btn_choice);
+        btn_change_use = findViewById(R.id.btn_change_use);
+        btn_delete_id = findViewById(R.id.btn_delete_id);
+
+        btnLogout.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MyPage.this, LoginActivity.class));
+            finish();
+        });
+
+        btn_choice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyPage.this, MyChoice.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_delete_id.setOnClickListener(view -> revokeAccess());
+
+        btn_change_use.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyPage.this, MainActivity4.class);
+                startActivity(intent);
+            }
+        });
+
+        // MainActivity4에서 전달된 요금제 이름 받기
+        Intent intent = getIntent();
+        String selectedPlanName = intent.getStringExtra("selectedPlanName");
+
+        TextView planNameTextView = findViewById(R.id.txt4);
+        planNameTextView.setText(selectedPlanName);
+
+        // Google SignIn API에서 정보 가져오기
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
+    }
+
+    private void revokeAccess() {
+        if (mAuth.getCurrentUser() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("정말로 계정을 삭제하시겠습니까?")
+                    .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mAuth.getCurrentUser().delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                startActivity(new Intent(MyPage.this, LoginActivity.class));
+                                                finish();
+                                            } else {
+                                                // 계정 삭제 실패 처리
+                                                Toast.makeText(MyPage.this, "계정 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        }
+                    })
+                    .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // 사용자가 "아니오"를 선택한 경우 처리
+                            // 아무런 동작을 하지 않음
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            // 사용자가 로그인되어 있지 않은 경우의 처리
+            Toast.makeText(this, "로그인되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Google SignIn API에서 가져온 정보로 UI 업데이트하기
+    private void updateUI(GoogleSignInAccount account) {
+        if (account != null) {
+            // 프로필 이름 설정
+            nameTextView.setText(account.getDisplayName());
+
+            // 프로필 사진 설정
+            if (account.getPhotoUrl() != null) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL(account.getPhotoUrl().toString());
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setDoInput(true);
+                            connection.connect();
+                            InputStream input = connection.getInputStream();
+                            final Bitmap bitmap = BitmapFactory.decodeStream(input);
+
+                            // UI 업데이트는 메인 스레드에서 수행되어야 합니다.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    profileImageView.setImageResource(R.drawable.profile);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            profileImageView.setImageResource(R.drawable.profile);
+                        }
+                    }
+                }).start();
+            } else {
+                profileImageView.setImageResource(R.drawable.profile);
+            }
+        }
+    }
+}
