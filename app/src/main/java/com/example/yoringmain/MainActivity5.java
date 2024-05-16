@@ -64,6 +64,7 @@ public class MainActivity5 extends AppCompatActivity {
                 fetchSubscriptionPlans();
             }
         });
+
     }
 
     private void fetchSubscriptionPlans() {

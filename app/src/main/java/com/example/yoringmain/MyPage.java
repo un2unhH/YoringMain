@@ -50,24 +50,26 @@ public class MyPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_mypage);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_home:
-                        startActivity(new Intent(MyPage.this, MainActivity.class));
-                        return true;
-                    case R.id.nav_membership:
-                        startActivity(new Intent(MyPage.this, MembershipMain.class));
-                        return true;
-                    case R.id.nav_mypage:
-                        return true;
-                    default:
-                        return false;
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.nav_home:
+                            startActivity(new Intent(MyPage.this, MainActivity.class));
+                            return true;
+                        case R.id.nav_my_page:
+                            startActivity(new Intent(MyPage.this, MyPage.class));
+                            return true;
+                        case R.id.nav_change_model:
+                            startActivity(new Intent(MyPage.this, MainActivity3.class));
+                            return true;
+                        case R.id.nav_all_sub:
+                            startActivity(new Intent(MyPage.this, MainActivity5.class));
+                            return true;
+                        default:
+                            return false;
+                    }
                 }
-            }
         });
 
         TextView txt1, txt2;

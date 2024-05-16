@@ -511,11 +511,7 @@ public class MainActivity4 extends AppCompatActivity {
             tvTelecomName.setText(plan.getTelecomName());
             tvPrice.setText(String.format("가격: %s", plan.getPrice()));
             tvData.setText(plan.getData());
-            if (plan.getSpeedLimit() != null) {
-                tvSpeedLimit.setText(plan.getSpeedLimit());
-            } else {
-                tvSpeedLimit.setVisibility(View.GONE);
-            }
+            tvSpeedLimit.setText(String.format("%s", plan.getSpeedLimit()));
 
             Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.nanumsbold_e);
             tvPlanName.setTypeface(typeface);

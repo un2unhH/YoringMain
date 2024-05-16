@@ -11,11 +11,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.view.MenuItem;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity3 extends AppCompatActivity {
     private ImageButton imbApple, img15ProMax, img15Pro, img15Plus, img15, img14ProMax, img14Pro, img14Plus, img14, imgSE,
             imbSamsung, imbGalaxyS24Ultra, imbGalaxyS24Plus, imbGalaxyS24, imbGalaxyS23Ultra, imbGalaxyS23Plus,imbGalaxyS23, imbGalaxyS23FE,
             imbGalaxyZFold5, imbGalaxyZFlip5, imbGalaxyZFold4, imbGalaxyZFlip4, imbGalaxyQuantum4,imbGalaxyA15, imbGalaxyA25, imbGalaxyA24;
     private Toolbar toolbar;
+    private BottomNavigationView bottomNavigationView;
     private LinearLayout linearLayout1, linearLayout2, linearLayout3, linearSamsung1, linearSamsung2, linearSamsung3, linearSamsung4, linearSamsung5;
 
     @Override
@@ -66,7 +69,28 @@ public class MainActivity3 extends AppCompatActivity {
         imbGalaxyA25 = findViewById(R.id.imb_galaxy_a25);
         imbGalaxyQuantum4 = findViewById(R.id.imb_galaxy_quantum4);
 
-
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        startActivity(new Intent(MainActivity3.this, MainActivity.class));
+                        return true;
+                    case R.id.nav_my_page:
+                        startActivity(new Intent(MainActivity3.this, MyPage.class));
+                        return true;
+                    case R.id.nav_change_model:
+                        startActivity(new Intent(MainActivity3.this, MainActivity3.class));
+                        return true;
+                    case R.id.nav_all_sub:
+                        startActivity(new Intent(MainActivity3.this, MainActivity5.class));
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
 
         imbApple.setOnClickListener(new View.OnClickListener() {
             @Override

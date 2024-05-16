@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    ImageButton btnRecommend, btnChangeModel, btnDetailRecommend, btnAllSubPlan;
+    ImageButton imbRecommend, imbDetailRecommend, imbNews1, imbNews2, imbNews3, imbSktMembership, imbKtMembership, imbLgMembership;
     TextView tvSubYet, tvCurrentSub, tvCurrentSubName;
     DatabaseReference userSubscriptionsRef;
 
@@ -42,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_home:
                         startActivity(new Intent(MainActivity.this, MainActivity.class));
                         return true;
-                    case R.id.nav_membership:
-                        startActivity(new Intent(MainActivity.this, MembershipMain.class));
-                        return true;
-                    case R.id.nav_mypage:
+                    case R.id.nav_my_page:
                         startActivity(new Intent(MainActivity.this, MyPage.class));
+                        return true;
+                    case R.id.nav_change_model:
+                        startActivity(new Intent(MainActivity.this, MainActivity3.class));
+                        return true;
+                    case R.id.nav_all_sub:
+                        startActivity(new Intent(MainActivity.this, MainActivity5.class));
                         return true;
                     default:
                         return false;
@@ -54,10 +58,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnRecommend = findViewById(R.id.btn_recommend);
-        btnChangeModel = findViewById(R.id.btn_change_model);
-        btnDetailRecommend = findViewById(R.id.btn_detail_recommend);
-        btnAllSubPlan = findViewById(R.id.btn_all_sub_plan);
+        imbRecommend = findViewById(R.id.btn_recommend);
+        imbDetailRecommend = findViewById(R.id.btn_detail_recommend);
+        imbKtMembership = findViewById(R.id.imb_kt_membership);
+        imbSktMembership = findViewById(R.id.imb_skt_membership);
+        imbLgMembership = findViewById(R.id.imb_lg_membership);
+        imbNews1 = findViewById(R.id.imb_news1);
+        imbNews2 = findViewById(R.id.imb_news2);
+        imbNews3 = findViewById(R.id.imb_news3);
 
         tvSubYet = findViewById(R.id.tv_sub_yet);
         tvCurrentSub = findViewById(R.id.tv_current_sub);
@@ -121,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnRecommend.setOnClickListener(new View.OnClickListener() {
+        imbRecommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MainActivity2.class);
@@ -129,15 +137,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnChangeModel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity3.class);
-                startActivity(intent);
-            }
-        });
 
-        btnDetailRecommend.setOnClickListener(new View.OnClickListener() {
+        imbDetailRecommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MainActivity7.class);
@@ -145,13 +146,54 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnAllSubPlan.setOnClickListener(new View.OnClickListener() {
+        imbSktMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity5.class);
-                startActivity(intent);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.tworld.co.kr/membership/benefit/brand"));
+                startActivity(browserIntent);
             }
         });
+
+        imbKtMembership.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.membership.kt.com/discount/partner/s_PartnerList.do"));
+                startActivity(browserIntent);
+            }
+        });
+
+        imbLgMembership.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.lguplus.com/benefit-membership?urcMbspDivsCd=01&urcMbspBnftDivsCd=02"));
+                startActivity(browserIntent);
+            }
+        });
+
+        imbNews1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://n.news.naver.com/article/028/0002685521?sid=101"));
+                startActivity(browserIntent);
+            }
+        });
+
+        imbNews2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://n.news.naver.com/article/003/0012493379?sid=105"));
+                startActivity(browserIntent);
+            }
+        });
+
+        imbNews3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://n.news.naver.com/article/015/0004965728?sid=105"));
+                startActivity(browserIntent);
+            }
+        });
+
     }
 
     private String getUserToken() {

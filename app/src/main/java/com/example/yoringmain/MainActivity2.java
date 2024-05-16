@@ -3,12 +3,14 @@ package com.example.yoringmain;
 import android.app.usage.NetworkStats;
 import android.app.usage.NetworkStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,6 +61,8 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+
 
         toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
@@ -168,7 +173,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-    public static class SubscriptionPlan implements Comparable<MainActivity2.SubscriptionPlan> {
+    public static class SubscriptionPlan implements Comparable<SubscriptionPlan> {
         private String sub_name, price, telecom_name, usage_network, speed_limit;
 
         public String getSubName() {
@@ -226,7 +231,7 @@ public class MainActivity2 extends AppCompatActivity {
         private int favoriteCount = 0;
         private HashMap<String, Boolean> favoritesMap = new HashMap<>();
 
-        public CustomAdapter(@NonNull Context context, int resource, @NonNull List<MainActivity2.SubscriptionPlan> objects) {
+        public CustomAdapter(@NonNull Context context, int resource, @NonNull List<SubscriptionPlan> objects) {
             super(context, resource, objects);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
@@ -263,7 +268,7 @@ public class MainActivity2 extends AppCompatActivity {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
             }
 
-            MainActivity2.SubscriptionPlan plan = getItem(position);
+            SubscriptionPlan plan = getItem(position);
             TextView tvPlanName = convertView.findViewById(R.id.tvPlanName);
             TextView tvTelecomName = convertView.findViewById(R.id.tvTelecomName);
             TextView tvPrice = convertView.findViewById(R.id.tvPrice);
@@ -271,7 +276,6 @@ public class MainActivity2 extends AppCompatActivity {
             ImageButton imbEmptyHeart = convertView.findViewById(R.id.imb_empty_heart);
 
             tvPlanName.setText(plan.getSubName());
-            Log.d("CustomAdapter", "Telecom Name: " + plan.getTelecomName());
             tvTelecomName.setText(plan.getTelecomName());
             tvPrice.setText(String.format("가격: %s", plan.getPrice()));
             tvSpeedLimit.setText(String.format("통신망: %s", plan.getUsageNetwork()));
