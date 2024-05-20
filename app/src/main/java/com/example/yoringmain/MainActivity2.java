@@ -147,8 +147,9 @@ public class MainActivity2 extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 planList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String priceStr = snapshot.child("price").getValue(String.class).replaceAll("[^\\d.]", "");
-                    double price = priceStr.isEmpty() ? 0.0 : Double.parseDouble(priceStr);
+                    Long price = snapshot.child("price").getValue(Long.class);
+                    // null 체크 및 double 변환
+                    double priceDouble = (price == null) ? 0.0 : price.doubleValue();
                     String dataStr = snapshot.child("data").getValue(String.class);
                     SubscriptionPlan plan = snapshot.getValue(SubscriptionPlan.class);
                     double data;
@@ -174,57 +175,88 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     public static class SubscriptionPlan implements Comparable<SubscriptionPlan> {
-        private String sub_name, price, telecom_name, usage_network, speed_limit;
+        private String sub_name, telecom_name, usage_network, data, message, sale_price, call;
+        private Long price;
+        private Double speed_limit;
 
-        public String getSubName() {
+        public String getSub_name() {
             return sub_name;
         }
 
-        public void setSubName(String sub_name) {
+        public void setSub_name(String sub_name) {
             this.sub_name = sub_name;
         }
 
-        public String getPrice() {
-            return price;
-        }
-
-        public void setPrice(String price) {
-            this.price = price;
-        }
-
-        public int getPriceInt() {
-            return Integer.parseInt(price.replaceAll("\\D+", ""));
-        }
-
-        public String getTelecomName() {
+        public String getTelecom_name() {
             return telecom_name;
         }
 
-        public void setTelecomName(String telecom_name) {
+        public void setTelecom_name(String telecom_name) {
             this.telecom_name = telecom_name;
         }
 
-        public String getUsageNetwork() {
+        public String getUsage_network() {
             return usage_network;
         }
 
-        public void setUsageNetwork(String usage_network) {
+        public void setUsage_network(String usage_network) {
             this.usage_network = usage_network;
         }
 
-        public String getSpeedLimit() {
+        public Double getSpeed_limit() {
             return speed_limit;
         }
 
-        public void setSpeedLimit(String speed_limit) {
-            this.speed_limit =speed_limit;
+        public void setSpeed_limit(Double speed_limit) {
+            this.speed_limit = speed_limit;
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public String getSale_price() {
+            return sale_price;
+        }
+
+        public void setSale_price(String sale_price) {
+            this.sale_price = sale_price;
+        }
+
+        public String getCall() {
+            return call;
+        }
+
+        public void setCall(String call) {
+            this.call = call;
+        }
+
+        public Long getPrice() {
+            return price;
+        }
+
+        public void setPrice(Long price) {
+            this.price = price;
         }
 
         @Override
-        public int compareTo(MainActivity2.SubscriptionPlan o) {
-            return Integer.compare(this.getPriceInt(), o.getPriceInt());
+        public int compareTo(SubscriptionPlan o) {
+            return Long.compare(this.price, o.price);
         }
     }
+
 
     private class CustomAdapter extends ArrayAdapter<MainActivity2.SubscriptionPlan> {
         private DatabaseReference favRef;
@@ -272,22 +304,28 @@ public class MainActivity2 extends AppCompatActivity {
             TextView tvPlanName = convertView.findViewById(R.id.tvPlanName);
             TextView tvTelecomName = convertView.findViewById(R.id.tvTelecomName);
             TextView tvPrice = convertView.findViewById(R.id.tvPrice);
+            TextView tvData = convertView.findViewById(R.id.tvData);
             TextView tvSpeedLimit = convertView.findViewById(R.id.tvSpeedLimit);
             ImageButton imbEmptyHeart = convertView.findViewById(R.id.imb_empty_heart);
 
-            tvPlanName.setText(plan.getSubName());
-            tvTelecomName.setText(plan.getTelecomName());
-            tvPrice.setText(String.format("가격: %s", plan.getPrice()));
-            tvSpeedLimit.setText(String.format("통신망: %s", plan.getUsageNetwork()));
-            tvSpeedLimit.setText(String.format("%s", plan.getSpeedLimit()));
+            tvPlanName.setText(plan.getSub_name());
+            tvTelecomName.setText(plan.getTelecom_name());
+            tvPrice.setText(String.valueOf(plan.getPrice()) + "원");
+            tvData.setText(plan.getData());
+            if (plan.getSpeed_limit() != null) {
+                tvSpeedLimit.setText(String.valueOf(plan.getSpeed_limit()) + "Mbps");
+            } else {
+                tvSpeedLimit.setText("");
+            }
 
             Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.nanumsbold_e);
             tvPlanName.setTypeface(typeface);
             tvTelecomName.setTypeface(typeface);
             tvPrice.setTypeface(typeface);
             tvSpeedLimit.setTypeface(typeface);
+            tvData.setTypeface(typeface);
 
-            String encodedSubName = encodeForFirebaseKey(plan.getSubName());
+            String encodedSubName = encodeForFirebaseKey(plan.getSub_name());
             if (favoritesMap.containsKey(encodedSubName)) {
                 imbEmptyHeart.setImageResource(R.drawable.full_heart);
                 imbEmptyHeart.setTag("full");
@@ -307,13 +345,13 @@ public class MainActivity2 extends AppCompatActivity {
 
                     imbEmptyHeart.setImageResource(R.drawable.full_heart);
                     imbEmptyHeart.setTag("full");
-                    Toast.makeText(getContext(), plan.getSubName() + " 찜 목록에 추가!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), plan.getSub_name() + " 찜 목록에 추가!", Toast.LENGTH_SHORT).show();
                     favRef.child(encodedSubName).setValue(true);
                     favoriteCount++;
                 } else {
                     imbEmptyHeart.setImageResource(R.drawable.empty_heart);
                     imbEmptyHeart.setTag("empty");
-                    Toast.makeText(getContext(), plan.getSubName() + " 찜 목록에서 제거", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), plan.getSub_name() + " 찜 목록에서 제거", Toast.LENGTH_SHORT).show();
                     favRef.child(encodedSubName).removeValue();
                     favoriteCount--;
                 }
@@ -362,7 +400,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SubscriptionPlan plan = subscriptionPlan.get(position);
-                Toast.makeText(MainActivity2.this, "Item Clicked: " + plan.getSubName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity2.this, "Item Clicked: " + plan.getSub_name(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -91,8 +91,7 @@ public class MainActivity7 extends AppCompatActivity {
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // DetailRecommendPage2 액티비티로 이동하는 Intent 생성
-                Intent intent = new Intent(MainActivity7.this, DetailRecommendPage2.class);
+                Intent intent = new Intent(MainActivity7.this, DetailRecommend.class);
                 startActivity(intent); // Intent 실행
             }
         });

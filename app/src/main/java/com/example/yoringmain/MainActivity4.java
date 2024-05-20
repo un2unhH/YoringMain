@@ -56,7 +56,7 @@ public class MainActivity4 extends AppCompatActivity {
     TextView tvDataUsage0, tvDataUsage7, tvDataUsage15, tvDataUsage71, tvDataUsage100, tvDataUsageUnlimited;
     private int dataUsageProgress = 0;
     String[] itemsSpinner1 = {"선택하세요", "SKT", "KT", "LG"};
-    String[] itemsSpinner2 = {"선택하세요", "스노우맨", "프리티", "스마텔", "SK 세븐모바일", "헬로모바일", "T Plus"};
+    String[] itemsSpinner2 = {"선택하세요", "프리티", "스마텔", "SK 세븐모바일", "헬로모바일", "T Plus"};
 
     private static final String DATA_USAGE_PROGRESS_KEY = "data_usage_progress";
 
@@ -285,50 +285,88 @@ public class MainActivity4 extends AppCompatActivity {
     }
 
     //파이어베이스 값 불러오기 위한 class
-    public static class SubscriptionPlan {
-        private String sub_name;
-        private String price;
-        private String telecom_name;
-        private String usage_network;
-        private String data;
-        private String speed_limit;
-        private String call;
-        private String message;
-        private String real_data;
-        private String sale_price;
+    public static class SubscriptionPlan implements Comparable<SubscriptionPlan> {
+        private String sub_name, telecom_name, usage_network, data, message, sale_price, call;
+        private Long price;
+        private Double speed_limit;
 
-        // 모든 필드의 게터와 세터
-        public String getSub_name() { return sub_name; }
-        public void setSub_name(String sub_name) { this.sub_name = sub_name; }
+        public String getSub_name() {
+            return sub_name;
+        }
 
-        public String getPrice() { return price; }
-        public void setPrice(String price) { this.price = price; }
+        public void setSub_name(String sub_name) {
+            this.sub_name = sub_name;
+        }
 
-        public String getTelecomName() { return telecom_name; }
-        public void setTelecomName(String telecom_name) { this.telecom_name = telecom_name; }
+        public String getTelecom_name() {
+            return telecom_name;
+        }
 
-        public String getUsageNetwork() { return usage_network; }
-        public void setUsageNetwork(String usage_network) { this.usage_network = usage_network; }
+        public void setTelecom_name(String telecom_name) {
+            this.telecom_name = telecom_name;
+        }
 
-        public String getData() { return data; }
-        public void setData(String data) { this.data = data; }
+        public String getUsage_network() {
+            return usage_network;
+        }
 
-        public String getSpeedLimit() { return speed_limit; }
-        public void setSpeedLimit(String speed_limit) { this.speed_limit = speed_limit; }
+        public void setUsage_network(String usage_network) {
+            this.usage_network = usage_network;
+        }
 
-        public String getCall() { return call; }
-        public void setCall(String call) { this.call = call; }
+        public Double getSpeed_limit() {
+            return speed_limit;
+        }
 
-        public String getMessage() { return message; }
-        public void setMessage(String message) { this.message = message; }
+        public void setSpeed_limit(Double speed_limit) {
+            this.speed_limit = speed_limit;
+        }
 
-        public String getReal_data() { return real_data; }
-        public void setReal_data(String real_data) { this.real_data = real_data; }
+        public String getData() {
+            return data;
+        }
 
-        public String getSale_price() { return sale_price; }
-        public void setSale_price(String sale_price) { this.sale_price = sale_price; }
+        public void setData(String data) {
+            this.data = data;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public String getSale_price() {
+            return sale_price;
+        }
+
+        public void setSale_price(String sale_price) {
+            this.sale_price = sale_price;
+        }
+
+        public String getCall() {
+            return call;
+        }
+
+        public void setCall(String call) {
+            this.call = call;
+        }
+
+        public Long getPrice() {
+            return price;
+        }
+
+        public void setPrice(Long price) {
+            this.price = price;
+        }
+
+        @Override
+        public int compareTo(SubscriptionPlan o) {
+            return Long.compare(this.price, o.price);
+        }
     }
-
 
 
     @Override
@@ -453,16 +491,16 @@ public class MainActivity4 extends AppCompatActivity {
     }
 
     private void updateListView() {
-        MainActivity4.CustomAdapter adapter = new MainActivity4.CustomAdapter(this, R.layout.list_item, subscriptionPlan);
+        MainActivity4.CustomAdapter adapter = new CustomAdapter(this, R.layout.list_item, subscriptionPlan);
         lvFilteringSub.setAdapter(adapter);
     }
 
-    private class CustomAdapter extends ArrayAdapter<MainActivity4.SubscriptionPlan> {
+    private class CustomAdapter extends ArrayAdapter<SubscriptionPlan> {
         private DatabaseReference favRef;
         private int favoriteCount = 0;
         private HashMap<String, Boolean> favoritesMap = new HashMap<>();
 
-        public CustomAdapter(@NonNull Context context, int resource, @NonNull List<MainActivity4.SubscriptionPlan> objects) {
+        public CustomAdapter(@NonNull Context context, int resource, @NonNull List<SubscriptionPlan> objects) {
             super(context, resource, objects);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
@@ -488,10 +526,6 @@ public class MainActivity4 extends AppCompatActivity {
             }
         }
 
-        private String decodeFromFirebaseKey(String encodedKey) {
-            return encodedKey.replace(',', '.').replace('-', '#').replace('+', '$').replace('(', '[').replace(')', ']');
-        }
-
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -499,26 +533,31 @@ public class MainActivity4 extends AppCompatActivity {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
             }
 
-            MainActivity4.SubscriptionPlan plan = getItem(position);
             TextView tvPlanName = convertView.findViewById(R.id.tvPlanName);
             TextView tvTelecomName = convertView.findViewById(R.id.tvTelecomName);
             TextView tvPrice = convertView.findViewById(R.id.tvPrice);
-            TextView tvSpeedLimit = convertView.findViewById(R.id.tvSpeedLimit);
             TextView tvData = convertView.findViewById(R.id.tvData);
+            TextView tvSpeedLimit = convertView.findViewById(R.id.tvSpeedLimit);
             ImageButton imbEmptyHeart = convertView.findViewById(R.id.imb_empty_heart);
 
+            SubscriptionPlan plan = getItem(position);
+
             tvPlanName.setText(plan.getSub_name());
-            tvTelecomName.setText(plan.getTelecomName());
-            tvPrice.setText(String.format("가격: %s", plan.getPrice()));
+            tvTelecomName.setText(plan.getTelecom_name());
+            tvPrice.setText(String.valueOf(plan.getPrice()) + "원");
             tvData.setText(plan.getData());
-            tvSpeedLimit.setText(String.format("%s", plan.getSpeedLimit()));
+            if (plan.getSpeed_limit() != null) {
+                tvSpeedLimit.setText(String.valueOf(plan.getSpeed_limit()) + "Mbps");
+            } else {
+                tvSpeedLimit.setText("");
+            }
 
             Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.nanumsbold_e);
             tvPlanName.setTypeface(typeface);
             tvTelecomName.setTypeface(typeface);
             tvPrice.setTypeface(typeface);
-            tvSpeedLimit.setTypeface(typeface);
             tvData.setTypeface(typeface);
+            tvSpeedLimit.setTypeface(typeface);
 
             String encodedSubName = encodeForFirebaseKey(plan.getSub_name());
             if (favoritesMap.containsKey(encodedSubName)) {
@@ -530,35 +569,30 @@ public class MainActivity4 extends AppCompatActivity {
             }
 
             imbEmptyHeart.setOnClickListener(v -> {
-                boolean isFavorited = imbEmptyHeart.getTag() != null && imbEmptyHeart.getTag().equals("full");
-
+                boolean isFavorited = "full".equals(imbEmptyHeart.getTag());
                 if (!isFavorited) {
                     if (favoriteCount >= 3) {
                         Toast.makeText(getContext(), "찜 목록이 가득 찼습니다. 비우고 다시 시도해주세요.", Toast.LENGTH_LONG).show();
                         return;
                     }
-
                     imbEmptyHeart.setImageResource(R.drawable.full_heart);
                     imbEmptyHeart.setTag("full");
-                    Toast.makeText(getContext(), plan.getSub_name() + " 찜 목록에 추가!", Toast.LENGTH_SHORT).show();
-
                     favRef.child(encodedSubName).setValue(true);
                     favoriteCount++;
                 } else {
                     imbEmptyHeart.setImageResource(R.drawable.empty_heart);
                     imbEmptyHeart.setTag("empty");
-                    Toast.makeText(getContext(), plan.getSub_name() + " 찜 목록에서 제거", Toast.LENGTH_SHORT).show();
-
                     favRef.child(encodedSubName).removeValue();
                     favoriteCount--;
                 }
             });
 
+            imbEmptyHeart.setFocusable(false);
+            imbEmptyHeart.setClickable(false);
+
             return convertView;
         }
     }
-
-
 
 
     private void loadFilteredSubPlans() {
@@ -573,7 +607,7 @@ public class MainActivity4 extends AppCompatActivity {
                         boolean telecomFilter = !isSpinnerDefault(spnMainTelecom) || !isSpinnerDefault(spnExtraTelecom) ? filterByTelecomName(plan) : true;
                         boolean priceFilter = isAnyPriceRadioButtonChecked() ? filterByPrice(plan.getPrice()) : true;
                         boolean dataFilter = dataUsageProgress > 0 ? filterByDataUsage(plan.getData()) : true;
-                        boolean speedLimitFilter = isAnySpeedLimitRadioButtonChecked() ? filterBySpeedLimit(plan.getSpeedLimit()) : true;
+                        boolean speedLimitFilter = isAnySpeedLimitRadioButtonChecked() ? filterBySpeedLimit(plan.getSpeed_limit()) : true;
 
                         if (telecomFilter && priceFilter && dataFilter && speedLimitFilter) {
                             subscriptionPlan.add(plan);
@@ -591,25 +625,23 @@ public class MainActivity4 extends AppCompatActivity {
     }
 
     //가격으로 필터링하는 함수
-    private boolean filterByPrice(String priceStr) {
+    private boolean filterByPrice(Long priceLong) {
         try {
-            int price = Integer.parseInt(priceStr.replaceAll("[^\\d]", ""));
-            if (rdbPrice1.isChecked() && price <= 20000) return true;
-            else if (rdbPrice2.isChecked() && price > 20000 && price <= 50000) return true;
-            else if (rdbPrice3.isChecked() && price > 50000 && price <= 70000) return true;
-            else if (rdbPrice4.isChecked() && price > 70000) return true;
+            if (rdbPrice1.isChecked() && priceLong <= 20000) return true;
+            else if (rdbPrice2.isChecked() && priceLong > 20000 && priceLong <= 50000) return true;
+            else if (rdbPrice3.isChecked() && priceLong > 50000 && priceLong <= 70000) return true;
+            else if (rdbPrice4.isChecked() && priceLong > 70000) return true;
         } catch (NumberFormatException e) {
             Log.e("NumberFormat", "파싱 실패", e);
         } return false;
     }
 
     //속도 제한 데이터로 필터링하는 함수
-    private boolean filterBySpeedLimit(String limitStr) {
-        if (limitStr == null) {
+    private boolean filterBySpeedLimit(Double limit) {
+        if (limit == null) {
             return false;
         }
         try {
-            double limit = Double.parseDouble(limitStr.replaceAll("[^0-9.]", ""));
             if (rdbLimit1.isChecked() && limit <= 1) return true;
             else if (rdbLimit2.isChecked() && limit <= 3) return true;
             else if (rdbLimit3.isChecked() && limit <= 5) return true;
@@ -689,7 +721,7 @@ public class MainActivity4 extends AppCompatActivity {
         String selectedMainTelecom = spnMainTelecom.getSelectedItem().toString();
         String selectedExtraTelecom = spnExtraTelecom.getSelectedItem().toString();
 
-        String telecomName = plan.getTelecomName();
+        String telecomName = plan.getTelecom_name();
         if (telecomName != null) {
             if (!"선택하세요".equals(selectedMainTelecom) && telecomName.equals(selectedMainTelecom)) {
                 return true;
@@ -717,12 +749,20 @@ public class MainActivity4 extends AppCompatActivity {
     }
 
     private String encodeForFirebaseKey(String key) {
-        key = key.replace('.', ',');
-        key = key.replace('#', '-');
-        key = key.replace('$', '+');
-        key = key.replace('[', '(');
-        key = key.replace(']', ')');
-        return key;
+        if (key == null) return "";
+        return key.replace('.', ',')
+                .replace('#', '-')
+                .replace('$', '+')
+                .replace('[', '(')
+                .replace(']', ')');
     }
 
+    private String decodeFromFirebaseKey(String encodedKey) {
+        if (encodedKey == null) return "";
+        return encodedKey.replace(',', '.')
+                .replace('-', '#')
+                .replace('+', '$')
+                .replace('(', '[')
+                .replace(')', ']');
+    }
 }

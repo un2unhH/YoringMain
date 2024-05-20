@@ -141,14 +141,19 @@ public class MainActivity5 extends AppCompatActivity {
             TextView tvPlanName = convertView.findViewById(R.id.tvPlanName);
             TextView tvTelecomName = convertView.findViewById(R.id.tvTelecomName);
             TextView tvPrice = convertView.findViewById(R.id.tvPrice);
+            TextView tvData = convertView.findViewById(R.id.tvData);
             TextView tvSpeedLimit = convertView.findViewById(R.id.tvSpeedLimit);
             ImageButton imbEmptyHeart = convertView.findViewById(R.id.imb_empty_heart);
 
             tvPlanName.setText(plan.getSub_name());
-            tvTelecomName.setText(plan.getTelecomName());
-            tvPrice.setText(String.format("가격: %s", plan.getPrice()));
-            tvSpeedLimit.setText(String.format("통신망: %s", plan.getUsageNetwork()));
-            tvSpeedLimit.setText(String.format("%s", plan.getSpeedLimit()));
+            tvTelecomName.setText(plan.getTelecom_name());
+            tvPrice.setText(String.valueOf(plan.getPrice()) + "원");
+            tvData.setText(plan.getData());
+            if (plan.getSpeed_limit() != null) {
+                tvSpeedLimit.setText(String.valueOf(plan.getSpeed_limit()) + "Mbps");
+            } else {
+                tvSpeedLimit.setText("");
+            }
 
             Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.nanumsbold_e);
             tvPlanName.setTypeface(typeface);
@@ -194,8 +199,10 @@ public class MainActivity5 extends AppCompatActivity {
         }
     }
 
-    public static class SubscriptionPlan implements Comparable<MainActivity5.SubscriptionPlan> {
-        private String sub_name, price, telecom_name, usage_network, speed_limit;
+    public static class SubscriptionPlan implements Comparable<SubscriptionPlan> {
+        private String sub_name, telecom_name, usage_network, data, message, sale_price, call;
+        private Long price;
+        private Double speed_limit;
 
         public String getSub_name() {
             return sub_name;
@@ -205,50 +212,73 @@ public class MainActivity5 extends AppCompatActivity {
             this.sub_name = sub_name;
         }
 
-        public String getPrice() {
-            return price;
-        }
-
-        public void setPrice(String price) {
-            this.price = price;
-        }
-
-        public int getPriceInt() {
-            try {
-                return Integer.parseInt(price.replaceAll("\\D+", ""));
-            } catch (NumberFormatException e) {
-                Log.e("NumberFormatException", "Failed to parse price: " + price);
-                return 0;
-            }
-        }
-
-        public String getTelecomName() {
+        public String getTelecom_name() {
             return telecom_name;
         }
 
-        public void setTelecomName(String telecom_name) {
+        public void setTelecom_name(String telecom_name) {
             this.telecom_name = telecom_name;
         }
 
-        public String getUsageNetwork() {
+        public String getUsage_network() {
             return usage_network;
         }
 
-        public void setUsageNetwork(String usage_network) {
+        public void setUsage_network(String usage_network) {
             this.usage_network = usage_network;
         }
 
-        public String getSpeedLimit() {
+        public Double getSpeed_limit() {
             return speed_limit;
         }
 
-        public void setSpeedLimit(String speed_limit) {
+        public void setSpeed_limit(Double speed_limit) {
             this.speed_limit = speed_limit;
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public String getSale_price() {
+            return sale_price;
+        }
+
+        public void setSale_price(String sale_price) {
+            this.sale_price = sale_price;
+        }
+
+        public String getCall() {
+            return call;
+        }
+
+        public void setCall(String call) {
+            this.call = call;
+        }
+
+        public Long getPrice() {
+            return price;
+        }
+
+        public void setPrice(Long price) {
+            this.price = price;
         }
 
         @Override
         public int compareTo(SubscriptionPlan o) {
-            return Integer.compare(this.getPriceInt(), o.getPriceInt());
+            return Long.compare(this.price, o.price);
         }
     }
 

@@ -141,7 +141,7 @@
 
                 <Spinner
                     android:layout_marginBottom="80dp"
-                    android:id="@+id/month"
+                    android:id="@+id/monthSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv6_4"
@@ -183,7 +183,7 @@
         android:layout_below="@+id/tv6_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="매월 납입 금액 : 할부해도 비싸"
+        android:text="매월 납입 금액 : "
         android:textSize="20dp"
         android:id="@+id/tv6_6"/>
 
