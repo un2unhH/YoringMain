@@ -7,6 +7,9 @@
         <item name="android:editTextStyle">@style/customEditTextFontStyle</item>
         <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle</item>
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
+        <item name="toolbarStyle">@style/CustomToolBar</item>
     </style>
-
+    <style name="BottomNavigationViewLabel">
+        <item name="android:textSize">12sp</item> <!-- 원하는 텍스트 크기로 조절 -->
+    </style>
 </resources>

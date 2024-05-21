@@ -10,7 +10,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -39,6 +41,7 @@ public class MainActivity7 extends AppCompatActivity {
     private static final float TEXT_SIZE_DEFAULT = 10f;
     private int selectedTvButtonId = 0;
     private int selectedInternetButtonId = 0;
+    List<String> telecomCompanies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +95,14 @@ public class MainActivity7 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity7.this, DetailRecommend.class);
-                startActivity(intent); // Intent 실행
+                int currentDataUsage = seekBarDataUsage.getProgress();
+                intent.putExtra("dataUsage", currentDataUsage);
+                intent.putExtra("isDisneyPlusPicked", isDisneyPlusPicked);
+                Log.d("IntentData", "Sending dataUsage: " + currentDataUsage + ", DisneyPlusPicked: " + isDisneyPlusPicked);
+                startActivity(intent);
             }
         });
+
 
         btnAutomatic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +141,7 @@ public class MainActivity7 extends AppCompatActivity {
         imbDisneyPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isDisneyPlusPicked = !isDisneyPlusPicked;
                 toggleDisneyPlusImage();
             }
         });
@@ -248,12 +257,13 @@ public class MainActivity7 extends AppCompatActivity {
     private void toggleDisneyPlusImage() {
         if (isDisneyPlusPicked) {
             imbDisneyPlus.setImageResource(R.drawable.disney_not_pick);
-            isDisneyPlusPicked = false;
         } else {
             imbDisneyPlus.setImageResource(R.drawable.disney_pick);
-            isDisneyPlusPicked = true;
         }
+        imbDisneyPlus.invalidate(); // UI 갱신 강제
     }
+
+
 
     private void updateDataUsageText(int dataUsage) {
         if (dataUsage == 301) {
@@ -344,21 +354,38 @@ public class MainActivity7 extends AppCompatActivity {
         spinnerFamily3 = findViewById(R.id.spinner_family3);
 
         List<String> telecomCompanies = new ArrayList<>();
+        telecomCompanies.add("선택");
         telecomCompanies.add("SKT");
         telecomCompanies.add("KT");
         telecomCompanies.add("LG U+");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, telecomCompanies);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, telecomCompanies);
 
         spinnerFamily1.setAdapter(adapter);
         spinnerFamily2.setAdapter(adapter);
         spinnerFamily3.setAdapter(adapter);
 
-        int offsetPx = 20;
-        spinnerFamily1.setDropDownVerticalOffset(offsetPx);
-        spinnerFamily2.setDropDownVerticalOffset(offsetPx);
-        spinnerFamily3.setDropDownVerticalOffset(offsetPx);
+        spinnerFamily1.setSelection(0);
+        spinnerFamily2.setSelection(0);
+        spinnerFamily3.setSelection(0);
+
+        setupSpinnerListener(spinnerFamily1);
+        setupSpinnerListener(spinnerFamily2);
+        setupSpinnerListener(spinnerFamily3);
     }
 
+    private void setupSpinnerListener(Spinner spinner) {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    String selected = (String) parent.getItemAtPosition(position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
 }

@@ -339,7 +339,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/imb_family1"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -372,7 +372,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/imb_family2"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
@@ -405,7 +405,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/imb_family3"
                         android:layout_width="65dp"
                         android:layout_height="65dp"

@@ -70,21 +70,24 @@ public class MainActivity3 extends AppCompatActivity {
         imbGalaxyQuantum4 = findViewById(R.id.imb_galaxy_quantum4);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        startActivity(new Intent(MainActivity3.this, MainActivity.class));
                         return true;
-                    case R.id.nav_my_page:
-                        startActivity(new Intent(MainActivity3.this, MyPage.class));
+                    case R.id.nav_all_menu:
+                        startActivity(new Intent(MainActivity3.this, AllMenu.class));
                         return true;
-                    case R.id.nav_change_model:
+                    case R.id.nav_telsearch:
+                        startActivity(new Intent(MainActivity3.this, MainActivity5.class));
+                        return true;
+                    case R.id.nav_chain:
                         startActivity(new Intent(MainActivity3.this, MainActivity3.class));
                         return true;
-                    case R.id.nav_all_sub:
-                        startActivity(new Intent(MainActivity3.this, MainActivity5.class));
+                    case R.id.nav_mypage:
+                        startActivity(new Intent(MainActivity3.this, MyPage.class));
                         return true;
                     default:
                         return false;

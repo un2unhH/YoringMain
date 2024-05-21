@@ -588,7 +588,7 @@ public class MainActivity4 extends AppCompatActivity {
             });
 
             imbEmptyHeart.setFocusable(false);
-            imbEmptyHeart.setClickable(false);
+            imbEmptyHeart.setClickable(true);
 
             return convertView;
         }
@@ -624,7 +624,6 @@ public class MainActivity4 extends AppCompatActivity {
         });
     }
 
-    //가격으로 필터링하는 함수
     private boolean filterByPrice(Long priceLong) {
         try {
             if (rdbPrice1.isChecked() && priceLong <= 20000) return true;

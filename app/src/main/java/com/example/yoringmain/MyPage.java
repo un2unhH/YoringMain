@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class MyPage extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private TextView nameTextView;
-    private ImageView profileImageView;
+    private ImageView profileImageView,  heartImageView, btnChangeUse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,38 +51,41 @@ public class MyPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_mypage);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.nav_home:
-                            startActivity(new Intent(MyPage.this, MainActivity.class));
-                            return true;
-                        case R.id.nav_my_page:
-                            startActivity(new Intent(MyPage.this, MyPage.class));
-                            return true;
-                        case R.id.nav_change_model:
-                            startActivity(new Intent(MyPage.this, MainActivity3.class));
-                            return true;
-                        case R.id.nav_all_sub:
-                            startActivity(new Intent(MyPage.this, MainActivity5.class));
-                            return true;
-                        default:
-                            return false;
-                    }
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        startActivity(new Intent(MyPage.this, MainActivity.class));
+                        return true;
+                    case R.id.nav_all_menu:
+                        startActivity(new Intent(MyPage.this, AllMenu.class));
+                        return true;
+                    case R.id.nav_telsearch:
+                        startActivity(new Intent(MyPage.this, MainActivity5.class));
+                        return true;
+                    case R.id.nav_chain:
+                        startActivity(new Intent(MyPage.this, MainActivity3.class));
+                        return true;
+                    case R.id.nav_mypage:
+                        return true;
+                    default:
+                        return false;
                 }
+            }
         });
 
         TextView txt1, txt2;
-        Button btnLogout, btn_choice, btn_delete_id, btn_change_use;
+        Button btnLogout, btn_delete_id, btn_change_use;
 
         nameTextView = findViewById(R.id.txt1);
-        txt2 = findViewById(R.id.txt2); //현재 어떤 로그인 상태가 무엇인지 알려주는 코드 추후에 추가하기
+        txt2 = findViewById(R.id.txt2); // 현재 로그인 상태를 표시하는 텍스트뷰, 추후에 코드 추가 예정
         profileImageView = findViewById(R.id.profile);
         btnLogout = findViewById(R.id.btn_logout);
-        btn_choice = findViewById(R.id.btn_choice);
-        btn_change_use = findViewById(R.id.btn_change_use);
-        btn_delete_id = findViewById(R.id.btn_delete_id);
+        heartImageView = findViewById(R.id.heart); // 'heart' ID의 이미지뷰
+        btnChangeUse = findViewById(R.id.btn_change_use); // 'btn_change_use' ID의 버튼
+        btn_delete_id = findViewById(R.id.btn_delete_id); // 'btn_delete_id' ID의 버튼
 
         btnLogout.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
@@ -89,7 +93,7 @@ public class MyPage extends AppCompatActivity {
             finish();
         });
 
-        btn_choice.setOnClickListener(new View.OnClickListener() {
+        heartImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyPage.this, MyChoice.class);
@@ -97,15 +101,21 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
-        btn_delete_id.setOnClickListener(view -> revokeAccess());
-
-        btn_change_use.setOnClickListener(new View.OnClickListener() {
+// 필요한 경우, 다른 버튼에 대한 클릭 리스너도 추가할 수 있습니다.
+        btnChangeUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyPage.this, MainActivity4.class);
-                startActivity(intent);
+                // 'btn_change_use' 클릭 시 동작 추가
             }
         });
+
+        btn_delete_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 'btn_delete_id' 클릭 시 동작 추가
+            }
+        });
+
 
         // MainActivity4에서 전달된 요금제 이름 받기
         Intent intent = getIntent();

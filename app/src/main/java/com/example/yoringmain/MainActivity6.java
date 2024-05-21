@@ -148,7 +148,7 @@ public class MainActivity6 extends AppCompatActivity {
                             if (storage != null && storage.equals(selectedStorage)) {
                                 String modelPriceStr = snapshot.child("modelPrice").getValue(String.class);
                                 if (modelPriceStr != null) {
-                                    tv6_5.setText("기기 가격 : " + modelPriceStr + "원");
+                                    tv6_5.setText(modelPriceStr + "원");
                                     break;
                                 }
                             }
@@ -184,7 +184,7 @@ public class MainActivity6 extends AppCompatActivity {
                                 if (modelPriceStr != null) {
                                     double modelPrice = Double.parseDouble(modelPriceStr.replaceAll("[^\\d.]", ""));
                                     int monthlyPrice = (int) Math.round(modelPrice / selectedMonths);
-                                    tv6_6.setText("월 납부 금액 : " + monthlyPrice + "원");
+                                    tv6_6.setText(monthlyPrice + "원");
                                     break;
                                 }
                             }

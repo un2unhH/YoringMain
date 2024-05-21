@@ -17,154 +17,137 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="horizontal"
-        android:background="@drawable/top" >
+        android:layout_marginTop="100dp"
+        android:layout_width="420dp"
+        android:layout_height="430dp"
+        android:background="@drawable/top"
+        android:orientation="vertical"
+        android:id="@+id/my_profile">
 
         <ImageView
             android:id="@+id/profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="30dp"
             android:layout_marginTop="70dp"
+            android:layout_gravity="center"
             android:src="@drawable/profile" />
 
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanumsbold_e"
+            android:textSize="20sp"
+            android:text="000님 반갑습니다!"
+            android:textColor="@color/black"
+            android:layout_margin="30dp" />
+
+        <TextView
+            android:id="@+id/txt2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:text="구글 로그인 상태"/>
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp">
 
             <TextView
-                android:id="@+id/txt1"
+                android:id="@+id/txt4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="70dp"
-                android:text="000님 반갑습니다."
-                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:text="SKT 0플랜 라지"
+                android:textSize="20dp"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:textStyle="bold"
+                android:fontFamily="@font/nanumsbold_e"/>
 
             <TextView
-                android:id="@+id/txt2"
+                android:id="@+id/txt4_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="10dp"
-                android:text="구글 로그인 상태" />
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:text=" 사용 중"
+                android:textSize="15dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nanumslite"/>
+
+            <ImageButton
+                android:id="@+id/btn_change_use"
+                android:layout_width="10dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/change_tel"
+                android:contentDescription="@string/change_profile_button_description"
+                android:layout_gravity="center"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/heart"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/heart_2"
+                android:contentDescription="@string/change_profile_button_description"
+                android:layout_gravity="center"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <ImageButton
                 android:id="@+id/imb_change_profile"
-                android:layout_width="86dp"
-                android:layout_height="19dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="40dp"
                 android:background="@drawable/change_profile"
                 android:contentDescription="@string/change_profile_button_description"
-                android:scaleType="fitCenter"
+                android:layout_gravity="center"
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
+        android:layout_below="@id/my_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txt3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:text="현재 사용중인 요금제"
-                android:textSize="15dp"
-                tools:ignore="TextSizeCheck" />
-
-            <Button
-                android:id="@+id/btn_change_use"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:background="@color/white"
-                android:text="수정"
-                android:textSize="15dp"
-                tools:ignore="TextSizeCheck" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="250dp">
-
-        <TextView
-            android:id="@+id/txt4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="SKT 0플랜 라지"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="350dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="찜"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:background="@color/white" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="350dp"
-        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginLeft="20dp"
             android:textStyle="bold"
             android:background="@color/white"
-            android:text="Logout"/>
+            android:text="로그아웃"
+            android:layout_marginBottom="1dp"
+            android:fontFamily="@font/nanumsregular" />
 
         <Button
+            android:layout_toEndOf="@id/btn_logout"
             android:id="@+id/btn_delete_id"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginLeft="30dp"
             android:textStyle="bold"
             android:background="@color/white"
-            android:text="회원 탈퇴" />
-
+            android:text="회원 탈퇴"
+            android:fontFamily="@font/nanumsregular" />
 
     </LinearLayout>
+
+
 
     <!-- 하단 탭 메뉴 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

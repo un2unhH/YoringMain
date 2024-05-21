@@ -13,4 +13,5 @@
     <color name="ic_launcher_background">#8EA2D7</color>
     <color name="seekbar_pass">#9C6262</color>
     <color name="seekbar_nopass">#EF8889</color>
+    <color name="Installment">#FF5151</color>
 </resources>
